@@ -28,9 +28,12 @@ namespace Presupuesto.Servicios
             {
                 var query = connection.Query("SELECT 1").FirstOrDefault();
                 var id = await connection.QuerySingleAsync<int>
-                                                        (@"INSERT INTO TiposCuentas(Nombre,UsuarioId,Orden )
-                                                        VALUES (@Nombre,@UsuarioId,0);
-                                                        SELECT SCOPE_IDENTITY()", tipoCuenta);
+                                                        ("TiposCuentas_Insertar", new
+                                                        {
+                                                            Nombre = tipoCuenta.Nombre,
+                                                            UsuarioId = tipoCuenta.UsuarioId,
+ 
+                                                        }, commandType: System.Data.CommandType.StoredProcedure);
                 tipoCuenta.id = id;
 
             }
