@@ -29,7 +29,7 @@ namespace Presupuesto.Servicios
         public async Task<IEnumerable<Cuenta>> Buscar(int usuarioId)
         {
             using var connection = new SqlConnection(connectionString);
-            return await connection.QueryAsync<Cuenta>(@"SELECT Cuentas.Id, Cuentas.Nombre, Balance, tc.nombre
+            return await connection.QueryAsync<Cuenta>(@"SELECT Cuentas.Id, Cuentas.Nombre, Balance, tc.Nombre as TipoCuenta
                                                         FROM Cuentas
                                                         INNER JOIN TiposCuentas tc ON
                                                         tc.id = Cuentas.TipoCuentaId

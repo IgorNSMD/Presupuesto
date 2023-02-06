@@ -5,6 +5,6 @@
         public string TipoCuenta { get; set; }
         public IEnumerable<Cuenta> Cuentas { get; set; }
 
-        public Decimal Balance => Cuentas.Sum(c => c.Balance);
+        public decimal Balance => Cuentas.Sum(c => c.Balance);
     }
 }
