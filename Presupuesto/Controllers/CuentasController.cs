@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Presupuesto.Models;
 using Presupuesto.Servicios;
@@ -10,14 +11,17 @@ namespace Presupuesto.Controllers
         private readonly IRepositorioTipoCuentas repositorioTipoCuentas;
         private readonly IServicioUsuarios servicioUsuarios;
         private readonly IRepositorioCuentas repositorioCuentas;
+        private readonly IMapper mapper;
 
         public CuentasController(IRepositorioTipoCuentas repositorioTipoCuentas,
                                  IServicioUsuarios servicioUsuarios,
-                                 IRepositorioCuentas repositorioCuentas)
+                                 IRepositorioCuentas repositorioCuentas,
+                                 IMapper mapper)
         {
             this.repositorioTipoCuentas = repositorioTipoCuentas;
             this.servicioUsuarios = servicioUsuarios;
             this.repositorioCuentas = repositorioCuentas;
+            this.mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -78,14 +82,17 @@ namespace Presupuesto.Controllers
                 return RedirectToAction("NoEncontrado", "Home");
             };
 
-            var modelo = new CuentaCreacionViewModel()
-            {
-                Id = cuenta.Id,
-                Nombre = cuenta.Nombre,
-                TipoCuentaId = cuenta.TipoCuentaId,
-                Descripcion = cuenta.Descripcion,
-                Balance = cuenta.Balance,
-            };
+            var modelo = mapper.Map<CuentaCreacionViewModel>(cuenta);
+
+            // Codigo se reemplaza por mapeo mapper
+            //var modelo = new CuentaCreacionViewModel()
+            //{
+            //    Id = cuenta.Id,
+            //    Nombre = cuenta.Nombre,
+            //    TipoCuentaId = cuenta.TipoCuentaId,
+            //    Descripcion = cuenta.Descripcion,
+            //    Balance = cuenta.Balance,
+            //};
 
             modelo.TiposCuentas = await ObtenerTiposCuentas(usuarioId);
 
