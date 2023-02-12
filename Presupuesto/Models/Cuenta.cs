@@ -15,7 +15,10 @@ namespace Presupuesto.Models
 
         [Display(Name ="Tipo de Cuenta")]
         public int TipoCuentaId { get; set; }
-        public Decimal Balance { get; set; }
+
+        //[DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
+        //[DataType(DataType.Currency)]
+        public decimal Balance { get; set; }
 
         [StringLength(maximumLength: 1000)]
         public string Descripcion { get; set; }
