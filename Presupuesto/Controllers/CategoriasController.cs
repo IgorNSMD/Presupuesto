@@ -17,7 +17,7 @@ namespace Presupuesto.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Crear()
+        public IActionResult Crear()
         {
             return View();
         }
