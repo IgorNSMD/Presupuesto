@@ -7,6 +7,7 @@ namespace Presupuesto.Servicios
     public interface IRepositorioCategorias
     {
         Task Crear(Categoria categoria);
+        Task<IEnumerable<Categoria>> Obtener(int usuarioId);
     }
 
     public class RepositorioCategorias : IRepositorioCategorias
@@ -26,6 +27,14 @@ namespace Presupuesto.Servicios
                                                             SELECT SCOPE_IDENTITY();", categoria);
 
             categoria.Id = id;
+        }
+
+        public async Task<IEnumerable<Categoria>> Obtener(int usuarioId)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.QueryAsync<Categoria>(@"SELECT Nombre, TipoOperacionId, UsuarioId
+                                                        FROM Categorias
+                                                        WHERE UsuarioId = @usuarioId", new { usuarioId });
         }
     }
 }
