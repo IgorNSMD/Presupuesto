@@ -6,7 +6,10 @@ namespace Presupuesto.Models
     {
         public int id { get; set; }
         public int UsuarioId { get; set; }
-        public DateTime FechaTransaccion { get; set; } = DateTime.Today;
+
+        [Display(Name = "Fecha Transacción")]
+        [DataType(DataType.DateTime)]
+        public DateTime FechaTransaccion { get; set; } = DateTime.Parse(DateTime.Now.ToString("g"));  // DateTime.Parse(DateTime.Now.ToString("yyyy-MM-dd hh:MM tt")); // DateTime.Now;
 
         public decimal Monto { get; set; }
 
