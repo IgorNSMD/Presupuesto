@@ -6,7 +6,9 @@ namespace Presupuesto.Servicios
 {
     public interface IRepositorioTransacciones
     {
+        Task Actualizar(Transaccion transaccion, decimal montoAnterior, int cuentaAnterior);
         Task Crear(Transaccion transaccion);
+        Task<Transaccion> ObtenerPorId(int id, int usuarioId);
     }
 
     public class RepositorioTransacciones: IRepositorioTransacciones
@@ -34,5 +36,39 @@ namespace Presupuesto.Servicios
             transaccion.id = id;
 
         }
+
+        public async Task Actualizar(Transaccion transaccion, 
+                                    decimal montoAnterior, int cuentaAnterior)
+        {
+            using var connection = new SqlConnection(connectionString);
+            await connection.QuerySingleAsync<int>(@"Transacciones_Actualizar",
+                    new
+                    {
+                        transaccion.id,
+                        transaccion.FechaTransaccion,
+                        transaccion.Monto,
+                        transaccion.CategoriaId,
+                        transaccion.CuentaId,
+                        transaccion.Nota,
+                        montoAnterior,
+                        cuentaAnterior
+                    }, commandType: System.Data.CommandType.StoredProcedure);
+
+
+
+        }
+
+        public async Task<Transaccion> ObtenerPorId(int id, int usuarioId)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.QueryFirstOrDefaultAsync<Transaccion>(@"SELECT Transacciones.*, cat.TipoOperacionId
+                                                                            FROM Transacciones
+                                                                            INNER JOIN Categorias cat
+                                                                            ON Cat.Id = Transacciones.id
+                                                                            where Transacciones.Id = @id
+                                                                            and Transacciones.UsuarioId = @usuarioId
+                                                                            ", new { id, usuarioId });
+        }
+
     }
 }
