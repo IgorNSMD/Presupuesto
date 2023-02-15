@@ -64,7 +64,7 @@ namespace Presupuesto.Servicios
             return await connection.QueryFirstOrDefaultAsync<Transaccion>(@"SELECT Transacciones.*, cat.TipoOperacionId
                                                                             FROM Transacciones
                                                                             INNER JOIN Categorias cat
-                                                                            ON Cat.Id = Transacciones.id
+                                                                            ON Cat.Id = Transacciones.CategoriaId
                                                                             where Transacciones.Id = @id
                                                                             and Transacciones.UsuarioId = @usuarioId
                                                                             ", new { id, usuarioId });
