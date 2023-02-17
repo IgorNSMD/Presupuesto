@@ -79,7 +79,7 @@ namespace Presupuesto.Controllers
             var transacciones = await repositorioTransacciones.ObtenerPorCuentaId(obtenerTransaccionesPorCuenta);
 
             var modelo = new ReporteTransaccionesDetalladas();
-            ViewBag.Cuentas = cuenta.Nombre;
+            ViewBag.Cuenta = cuenta.Nombre;
 
             var transaccionesPorFecha = transacciones
                                     .OrderByDescending(x => x.FechaTransaccion)
@@ -93,6 +93,12 @@ namespace Presupuesto.Controllers
             modelo.TransaccionesAgrupadas = transaccionesPorFecha;
             modelo.FechaInicio = fechaInicio;
             modelo.FechaFin = fechaFin;
+
+            ViewBag.mesAnterior = fechaInicio.AddMonths(-1).Month;
+            ViewBag.anioAnterior = fechaInicio.AddMonths(-1).Year;
+
+            ViewBag.mesPosterior = fechaInicio.AddMonths(1).Month;
+            ViewBag.anioPosterior = fechaInicio.AddMonths(1).Year;
 
             return View(modelo);
 
