@@ -134,7 +134,7 @@ namespace Presupuesto.Servicios
                                                     on cat.id = Transacciones.CategoriaId
                                                     where Transacciones.UsuarioId = @usuarioId 
                                                     and year(FechaTransaccion) = @anio
-                                                    group by month(FechaTransaccion), cat.FechaTransaccion
+                                                    group by month(FechaTransaccion), cat.TipoOperacionId
                                                     ", new { usuarioId, anio });
         }
 
