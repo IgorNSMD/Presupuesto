@@ -11,6 +11,7 @@ namespace Presupuesto.Servicios
         Task Crear(Transaccion transaccion);
         Task<IEnumerable<Transaccion>> ObtenerPorCuentaId(ObtenerTransaccionesPorCuenta modelo);
         Task<Transaccion> ObtenerPorId(int id, int usuarioId);
+        Task<IEnumerable<ResultadoObtenerPorMes>> ObtenerPorMes(int usuarioId, int anio);
         Task<IEnumerable<ResultadoObtenerPorSemana>> ObtenerPorSemana(ParametroObtenerTransaccionesPorUsuario modelo);
         Task<IEnumerable<Transaccion>> ObtenerPorUsuarioId(ParametroObtenerTransaccionesPorUsuario modelo);
     }
@@ -121,6 +122,22 @@ namespace Presupuesto.Servicios
                                                     group by datediff(d,@fechaInicio,FechaTransaccion) / 7, cat.TipoOperacionId
                                                     ", modelo);
         }
+
+        public async Task<IEnumerable<ResultadoObtenerPorMes>> ObtenerPorMes(int usuarioId, int anio)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.QueryAsync<ResultadoObtenerPorMes>(@"
+                                                    select month(FechaTransaccion) as mes,
+                                                    sum(monto) as Monto, cat.TipoOperacionId
+                                                    from Transacciones
+                                                    inner join Categorias cat
+                                                    on cat.id = Transacciones.CategoriaId
+                                                    where Transacciones.UsuarioId = @usuarioId 
+                                                    and year(FechaTransaccion) = @anio
+                                                    group by month(FechaTransaccion), cat.FechaTransaccion
+                                                    ", new { usuarioId, anio });
+        }
+
 
         public async Task Borrar(int id)
         {
