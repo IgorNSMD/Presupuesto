@@ -117,7 +117,7 @@ namespace Presupuesto.Servicios
                                                     inner join Categorias cat
                                                     on cat.id = Transacciones.CategoriaId
                                                     where Transacciones.UsuarioId = @usuarioId
-                                                    and FechaTransaccion BETWEEEN @fechaInicio and @fechaFin
+                                                    and FechaTransaccion between @fechaInicio and @fechaFin
                                                     group by datediff(d,@fechaInicio,FechaTransaccion) / 7, cat.TipoOperacionId
                                                     ", modelo);
         }
