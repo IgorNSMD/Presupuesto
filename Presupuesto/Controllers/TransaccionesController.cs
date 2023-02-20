@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Presupuesto.Models;
 using Presupuesto.Servicios;
+using System.Data;
 
 namespace Presupuesto.Controllers
 {
@@ -149,6 +151,66 @@ namespace Presupuesto.Controllers
         public IActionResult ExcelReporte()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<FileResult> ExportarExcelPorMes(int mes, int anio)
+        {
+            var fechaInicio = new DateTime(anio, mes, 1);
+            var fechaFin = fechaInicio.AddMonths(1).AddDays(-1);
+            var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+
+            var transacciones = await repositorioTransacciones.ObtenerPorUsuarioId(
+                new ParametroObtenerTransaccionesPorUsuario
+                {
+                    UsuarioId = usuarioId,
+                    FechaInicio = fechaInicio,
+                    FechaFin = fechaFin
+                });
+
+            var nombreArchivo = $"Presupuesto - {fechaInicio.ToString("MMM yyyy")}.xlsx";
+            return GenerarExcel(nombreArchivo, transacciones);
+
+        }
+        private FileResult GenerarExcel(string nombreArchivo, IEnumerable<Transaccion> transacciones)
+        {
+            DataTable dataTable = new DataTable("Transacciones");
+            dataTable.Columns.AddRange(new DataColumn[]
+            {
+                new DataColumn("Fecha"),
+                new DataColumn("Cuenta"),
+                new DataColumn("Categoria"),
+                new DataColumn("Nota"),
+                new DataColumn("Monto"),
+                new DataColumn("Ingreso/Gasto")
+
+            });
+
+            foreach (var transacion in transacciones)
+            {
+                dataTable.Rows.Add(
+                    transacion.FechaTransaccion,
+                    transacion.Cuenta,
+                    transacion.Categoria,
+                    transacion.Nota,
+                    transacion.Monto,
+                    transacion.TipoOperacionId
+
+                    );
+            }
+
+            using (XLWorkbook wb = new XLWorkbook())
+            {
+                wb.Worksheets.Add(dataTable);
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    wb.SaveAs(stream);
+                    return File(stream.ToArray(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+                        nombreArchivo);
+                };
+            };
+
         }
 
         public IActionResult Calendario()
