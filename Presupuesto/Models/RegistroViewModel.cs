@@ -8,7 +8,7 @@ namespace Presupuesto.Models
         [EmailAddress(ErrorMessage = "El campo {0} debe ser un correo ")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage = "El campo {1} es requerido ")]
+        //[Required(ErrorMessage = "El campo {1} es requerido ")]
         public string Password { get; set; }
     }
 }
