@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Presupuesto.Models;
+using System.Security.Claims;
 
 namespace Presupuesto.Controllers
 {
@@ -56,7 +57,16 @@ namespace Presupuesto.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    var claims = User.Claims.ToList();
+            //    var usuarioIdReal = claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault();
+            //    var id = usuarioIdReal.Value;
+            //} else
+            //{
+
+            //}
+                return View();
         }
 
         [HttpPost]
