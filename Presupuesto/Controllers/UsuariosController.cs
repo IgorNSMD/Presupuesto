@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Presupuesto.Models;
@@ -17,12 +18,14 @@ namespace Presupuesto.Controllers
             this.signInManager = signInManager;
         }
 
+        [AllowAnonymous]
         public IActionResult Registro()
         {
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Registro(RegistroViewModel modelo)
         {
             if (!ModelState.IsValid)
@@ -55,6 +58,7 @@ namespace Presupuesto.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             //if (User.Identity.IsAuthenticated)
@@ -70,6 +74,7 @@ namespace Presupuesto.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel modelo)
         {
             if (!ModelState.IsValid)
