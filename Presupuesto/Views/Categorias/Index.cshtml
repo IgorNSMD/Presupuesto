@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Categoria>
+﻿@model PaginacionRespuesta<Categoria>
 @{
      ViewData["Title"] = "Indice Categoria";
 }
@@ -8,6 +8,11 @@
     La categoría nos permite indicar en qué gastamos nuestro dinero, también, de donde viene
     nuestros ingresos
 </h5>
+
+<h2>
+    Cantidad de Categorias: @Model.CantidadTotalRecord  - Cantidad de Páginas @Model.CantidadTotalDePaginas
+</h2>
+
 
 <a asp-action="Crear" class="btn btn-primary mb-3">Crear Nuevo</a>
 
@@ -20,7 +25,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var categoria in Model)
+        @foreach (var categoria in Model.Elementos)
         {
              <tr>
                 <td>

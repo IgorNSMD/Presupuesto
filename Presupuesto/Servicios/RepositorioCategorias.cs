@@ -12,7 +12,7 @@ namespace Presupuesto.Servicios
         Task<IEnumerable<Categoria>> Obtener(int usuarioId, PaginacionViewModel paginacion);
         Task<IEnumerable<Categoria>> Obtener(int usuarioId, TipoOperacion tipoOperacionId);
         Task<Categoria> ObtenerPorId(int id, int usuarioId);
-
+        Task<int> Contar(int usuarioId);
     }
 
     public class RepositorioCategorias : IRepositorioCategorias
@@ -45,6 +45,14 @@ namespace Presupuesto.Servicios
                                                         ROWS FETCH NEXT { paginacion.RecordsPorPagina }
                                                         ROWS ONLY
                                                         ", new { usuarioId });
+        }
+
+        public async Task<int> Contar(int usuarioId)
+        {
+            using var connection = new SqlConnection(connectionString);
+            return await connection.ExecuteScalarAsync<int>(@"SELECT COUNT(*) 
+                                                              FROM Categorias
+                                                              WHERE UsuarioId = @usuarioId", new { usuarioId });
         }
 
         public async Task<IEnumerable<Categoria>> Obtener(int usuarioId, TipoOperacion tipoOperacionId)

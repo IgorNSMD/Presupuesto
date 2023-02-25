@@ -19,8 +19,18 @@ namespace Presupuesto.Controllers
         public async Task<IActionResult> Index(PaginacionViewModel paginacionViewModel)
         {
             var usuarioId = servicioUsuarios.ObtenerUsuarioId();
-            var categoria = await repositorioCategorias.Obtener(usuarioId, paginacionViewModel);
-            return View(categoria);
+            var categorias = await repositorioCategorias.Obtener(usuarioId, paginacionViewModel);
+            var totalCategorias = await repositorioCategorias.Contar(usuarioId);
+            var respuestaVM = new PaginacionRespuesta<Categoria>
+            {
+                Elementos = categorias,
+                Pagina = paginacionViewModel.Pagina,
+                RecordsPorPagina = paginacionViewModel.RecordsPorPagina,
+                CantidadTotalRecord = totalCategorias,
+                BaseURL = "/categorias"
+            };
+
+            return View(respuestaVM);
 
         }
 
