@@ -12,7 +12,7 @@ namespace Presupuesto.Models
         //[StringLength(maximumLength:50, MinimumLength =5, ErrorMessage = "Longitud del campo {0} debe ser entre 5 y 50 caracteres..")]
         //[Display(Name = "Nombre del tipo de cuenta")]
         [PrimeraLetraMayuscula]
-        [Remote(action: "VerificarExisteTipoCuenta", controller:"TiposCuentas")]
+        [Remote(action: "VerificarExisteTipoCuenta", controller:"TiposCuentas", AdditionalFields = nameof(id))]
 
         public string Nombre { get; set; }
         public int UsuarioId { get; set; }
